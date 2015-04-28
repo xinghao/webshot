@@ -12,11 +12,11 @@ module Webshot
   ## Browser settings
   # Width
   mattr_accessor :width
-  @@width = 1024
+  @@width = 1440
 
   # Height
   mattr_accessor :height
-  @@height = 768
+  @@height = 400
 
   # User agent
   mattr_accessor :user_agent

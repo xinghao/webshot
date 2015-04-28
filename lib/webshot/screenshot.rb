@@ -34,6 +34,7 @@ module Webshot
         gravity = opts.fetch(:gravity, "north")
         quality = opts.fetch(:quality, 85)
 
+        puts opts.inspect
         # Reset session before visiting url
         Capybara.reset_sessions! unless @session_started
         @session_started = false
@@ -46,12 +47,16 @@ module Webshot
 
         # Check response code
         if page.driver.status_code.to_i == 200 || page.driver.status_code.to_i / 100 == 3
-          tmp = Tempfile.new(["webshot", ".png"])
-          tmp.close
+          # tmp = Tempfile.new(["webshot", ".png"])
+          # tmp.close
+          return page
           begin
+#open('myfile.png', 'w') { |tmp|
+
+            
             # Save screenshot to file
             page.driver.save_screenshot(tmp.path, :full => true)
-
+            return tmp
             # Resize screenshot
             thumb = MiniMagick::Image.open(tmp.path)
             if block_given?
@@ -70,8 +75,9 @@ module Webshot
             # Save thumbnail
             thumb.write path
             thumb
+#            }
           ensure
-            tmp.unlink
+            #tmp.unlink
           end
         else
           raise WebshotError.new("Could not fetch page: #{url.inspect}, error code: #{page.driver.status_code}")
